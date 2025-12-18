@@ -33,7 +33,6 @@ def generate_config(n_agents, n_apples, grid_size=5):
             'state': [float(x), float(y), 0.0],
             'kinematics': { 'name': 'omni' },
             'shape': { 'name': 'circle', 'radius': 0.2 },
-            'goal': [float(x), float(y), 0.0],
             'behavior': { 'name': 'dash' } 
         }
         config['robot'].append(robot_entry)
@@ -338,4 +337,4 @@ def run_experiment(n_agents=10):
     env.show() 
 
 if __name__ == '__main__':
-    run_experiment(n_agents=3)
+    run_experiment(n_agents=4)
