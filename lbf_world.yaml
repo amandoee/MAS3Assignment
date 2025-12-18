@@ -8,27 +8,30 @@ world:
   collision_threshold: 0.05
 robot:
 - id: 0
-  state: [2.0, 0.0, 0.0]
+  state: [2.0, 1.0, 0.0]
   kinematics: {name: omni}
   shape: {name: circle, radius: 0.2}
-  goal: [2.0, 0.0, 0.0]
   behavior: {name: dash}
+  color: [0, 0, 1.0]
 - id: 1
-  state: [3.0, 3.0, 0.0]
+  state: [1.0, 4.0, 0.0]
   kinematics: {name: omni}
   shape: {name: circle, radius: 0.2}
-  goal: [3.0, 3.0, 0.0]
   behavior: {name: dash}
-- id: 2
-  state: [0.0, 3.0, 0.0]
-  kinematics: {name: omni}
-  shape: {name: circle, radius: 0.2}
-  goal: [0.0, 3.0, 0.0]
-  behavior: {name: dash}
+  color: [0, 0, 1.0]
 obstacle:
 - id: 0
-  state: [1.0, 3.0, 0.0]
+  state: [0.0, 2.0, 0.0]
   shape: {name: circle, radius: 0.2}
+  color: [1.0, 0, 0]
+  static: true
 - id: 1
   state: [1.0, 1.0, 0.0]
   shape: {name: circle, radius: 0.2}
+  color: [1.0, 0, 0]
+  static: true
+- id: 2
+  state: [4.0, 3.0, 0.0]
+  shape: {name: circle, radius: 0.2}
+  color: [1.0, 0, 0]
+  static: true
