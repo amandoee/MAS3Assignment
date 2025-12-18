@@ -1,0 +1,10 @@
+[project]
+name = "mas3"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ir-sim[all]>=2.8.1",
+    "numpy>=2.3.5",
+]
