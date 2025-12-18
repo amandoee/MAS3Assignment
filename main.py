@@ -67,11 +67,14 @@ class LBF_Wrapper:
         self.grid_size = grid_size
         
         # --- GAME SETTINGS ---
-        # Agent Level 1 (fixed for all agents)
-        # Food levels vary to create cooperation requirements and strategic decisions
-        self.agent_levels = [1] * n_agents 
-        # Generate random food levels from 1 to n_agents (creates variety and challenge)
-        self.apple_levels = [np.random.randint(1, n_agents + 1) for _ in range(n_apples)] 
+        # Agent levels: n, n-1, n-2, ..., 1
+        self.agent_levels = list(range(n_agents, 0, -1))
+        # Max food level: sum of 3 highest agent levels (ensures any 3 agents can collect any food)
+        # Accounts for edge spawn positions where only 3 agents can be adjacent
+        top_3_levels = sorted(self.agent_levels, reverse=True)[:3]
+        self.max_food_level = sum(top_3_levels)
+        # Generate random food levels from 1 to max_food_level
+        self.apple_levels = [np.random.randint(1, self.max_food_level + 1) for _ in range(n_apples)] 
         
         self.robot_list = []
         self.obstacle_list = []
@@ -97,8 +100,8 @@ class LBF_Wrapper:
         self.agent_pos = [np.array(c, dtype=float) for c in robot_coords]
         self.apple_pos = [np.array(c, dtype=float) for c in apple_coords]
         
-        # Regenerate random apple levels
-        self.apple_levels = [np.random.randint(1, self.n_agents + 1) for _ in range(self.n_apples)]
+        # Regenerate random apple levels (from 1 to sum of all agent levels)
+        self.apple_levels = [np.random.randint(1, self.max_food_level + 1) for _ in range(self.n_apples)]
         
         self._sync_visuals()
         return self.get_state()
@@ -340,7 +343,7 @@ def update_dashboard(fig, ax, game, episode_num):
 
 # --- 5. MAIN ---
 def run_experiment(n_agents=3):
-    grid_size = 5
+    grid_size = 8
     n_apples = 3
     
     yaml_path = generate_config(n_agents, n_apples, grid_size)
@@ -358,11 +361,11 @@ def run_experiment(n_agents=3):
         state = game.reset()
         
         # Curriculum learning: gradually increase food difficulty
-        # Early episodes: easier food (level 1), later: harder food (level 2)
-        if ep < 10:
-            game.apple_levels = [1] * game.n_apples  # Level 1: single agent can collect
-        else:
-            game.apple_levels = [np.random.randint(1, game.n_agents + 1) for _ in range(game.n_apples)]
+        # Early episodes: easier food (level 1), later: harder food (up to max)
+        # if ep < 10:
+        #     game.apple_levels = [1] * game.n_apples  # Level 1: weakest agent can collect alone
+        # else:
+        game.apple_levels = [np.random.randint(1, game.max_food_level + 1) for _ in range(game.n_apples)]
         
         game._sync_visuals()  # Ensure game state is synchronized
         episode_reward = 0
